@@ -1,33 +1,47 @@
 <%- include header%>
 
-  <div class="row" id=‘login’ style="margin-top:200px;">
+  <div class="row" id=‘login’ style="margin-top:100px;">
     <div class="col-md-3"></div>
     <div class="col-md-6">
 
       <div class="panel panel-success">
         <div class="panel-heading">用户注册</div>
         <div class="panel-body">
-          <form class="form-horizontal" action="http://localhost:3000/actReg" method="get">
+          <form data-toggle="validator" id="form" role="form" class="form-horizontal" action="/actReg" method="post">
             <div class="form-group">
-              <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
-              <div class="col-sm-10">
-                <input type="text" name='username' autocomplete='off' class="form-control" id="username" placeholder="请输入用户名">
+              <label for="inputEmail3" class="col-sm-4 control-label">username</label>
+              <div class="col-sm-8">
+                <input type="email" name='username' autocomplete='off' class="form-control" id="username" placeholder="enter username" data-error="the email address is invalid" required>
+                <div class="help-block with-errors"></div>
               </div>
             </div>
             <div class="form-group">
-              <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
-              <div class="col-sm-10">
-                <input type="password" autocomplete='off' name='password' class="form-control" id="password" placeholder="Password">
+              <label for="inputPassword3" class="col-sm-4 control-label">password</label>
+              <div class="col-sm-8">
+                <input type="password" maxlength="15" autocomplete='off' name='password' class="form-control" id="password" placeholder="Password" required>              
               </div>
             </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-4 control-label">confirm password</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#password" data-match-error="Whoops, these don't match" placeholder="Confirm" required>
+                    <div class="help-block with-errors"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-4 control-label">inviter</label>
+                  <div class="col-sm-8">
+                    <input type="text" name='inviter' id="inviter" autocomplete='off' class="form-control" placeholder="invitere">
+                  </div>
+                </div>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="button" class="btn btn-info" id="regBtn">注册</button>
+                <button type="submit" class="btn btn-info" id="regBtn">submit</button>
               </div>
             </div>
           </form>
         </div>
-        <div class="panel-footer">此版权归丁盛所有</div>
+        <div class="panel-footer">已经有账号，去       <a href="/login" style="font-size: 16px;">登录</a></div>
       </div>
 
     </div>
@@ -40,7 +54,20 @@
 
 
   <script type="text/javascript">
-    $('#regBtn').on('click',function(){
+  function getUrlParms(name){
+   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+   var r = window.location.search.substr(1).match(reg);
+   if(r!=null)
+   return unescape(r[2]);
+   return null;
+   }
+var id = getUrlParms("id");
+$('#inviter').val(id);
+  $('#form').validator().on('submit', function (e) {
+  if (e.isDefaultPrevented()) {
+    // handle the invalid form...
+  } else {
+
       let username = $('#username').val();
       let password = $('#password').val();
       $.ajax({
@@ -63,5 +90,8 @@
 
         }
       });
-    })
+
+  }
+})
+    
   </script>

@@ -73,7 +73,7 @@ router.get('/login', function(req, res, next) {
 });
 
 // 注册
-router.get('/reg', function(req, res, next) {
+router.post('/reg', function(req, res, next) {
   res.render('admin/rej', {
     title: '用户注册',
     name: req.cookies.name,
