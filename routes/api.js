@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var moment = require('moment');
 var dbModel = require('../db/mysql');
-
+var mailTransport = require("../service/email");
 /* GET users listing. */
 
 
@@ -99,5 +99,25 @@ router.post('/post',function(req,res){
   })
 })
 
+router.get("/send_email", function(req, res){
+  var options = {
+    from            : '"hangweiping@126.com',
+    to              : req.query.to,
+    subject         : '糖果注册激活',
+    text            : '',
+    html            : '<center><h1>你好，这是一封来自糖果的激活邮件！点击它！！！</h1></center><br><center>'+ req.query.url +'</center>'
+};
+
+mailTransport.sendMail(options, function(err, msg){
+    if(err){
+        console.log(err);
+        res.render('index', { title: err });
+    }
+    else {
+        console.log(msg);
+        res.render('index', { title: "已接收："+msg.accepted});
+    }
+});
+});
 
 module.exports = router;
