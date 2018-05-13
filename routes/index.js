@@ -22,6 +22,7 @@ router.get('*', function(req, res, next) {
     res.render('admin/rej', {
       title: '用户注册',
       name: req.cookies.name,
+      inviter: ''
     });
     return;
 
@@ -82,15 +83,10 @@ router.get('/login', function(req, res, next) {
 
 // 注册
 router.get('/reg', function(req, res, next) {
-  // let inviter = "";
-  // if (req.query && req.query.inviter){
-  //   inviter = req.query.inviter;
-  // }
-  // console.log(inviter);
   res.render('admin/rej', {
     title: 'register',
     name: req.cookies.name,
-    inviter: 1
+    inviter: req.query.inviter || ''
   });
 });
 

@@ -10,9 +10,9 @@
           <label for="inputPassword3" class="col-sm-4 control-label">my inviter link:</label>
           <div class="col-sm-8">
           <div class="input-group">
-          <input type="text" class="form-control" value="<%= link %>" Readonly>
+          <input type="text" class="form-control" id="foo" value="<%= link %>" Readonly>
           <div class="input-group-btn">
-            <button type="button" class="btn btn-primary" id="copy">copy clipboard</button>
+            <button type="button" class="btn btn-primary copy" data-clipboard-action="copy" data-clipboard-target="#foo">copy clipboard</button>
           </div>
       </div>
             
@@ -53,7 +53,6 @@
   </div>
 
 </div>
-
 </div>
 
 
@@ -81,5 +80,13 @@
           }
         }
         });
+      });
+
+      var clipboard = new ClipboardJS('.copy');
+      clipboard.on('success', function(e) {
+        console.log(e);
+      });
+      clipboard.on('error', function(e) {
+        console.log(e);
       });
     </script>
