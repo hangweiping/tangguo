@@ -1,112 +1,85 @@
 <%- include header%>
+<div class="row" id=‘login’ style="margin-top:100px;">
+<div class="col-md-3"></div>
+<div class="col-md-6">
 
-
-
-
-
-
-
-
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>用户名</th>
-        <th>密码</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for(var i =0; i<data.length;i++){%>
-        <tr class="row<%=i+1%>">
-          <th scope="row">
-            <%= i +1 %>
-          </th>
-          <td class="name">
-            <%=data[i].username %>
-          </td>
-          <td class="password">
-            <%=data[i].password -%>
-          </td>
-          <td >
-
-           <button type="button" class="btn btn-info submit btn-sm" data="<%=i+1%>" name="button">编辑</button>
-
-            <button type="button" class="btn btn-info btn-sm" name="button">删除</button>
-          </td>
-        </tr>
-        <%}%>
-    </tbody>
-  </table>
-
-<%- include page%>
-
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-        </div>
-        <div class="modal-body">
-          <form class="form-horizontal">
-            <div class="form-group">
-              <label for="inputEmail3" class="col-sm-2 control-label">id</label>
-              <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputPassword" class="col-sm-2 control-label">username</label>
-              <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputPassword" class="col-sm-2 control-label">username</label>
-              <div class="col-sm-10">
-                <input type="password" class="form-control"  placeholder="Password">
-              </div>
-            </div>
-            </from>
-
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary">修改</button>
-        </div>
+  <div class="panel panel-success">
+    <div class="panel-body">
+      <form class="form-horizontal" action="/login" method="post">
+      <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">my inviter link:</label>
+          <div class="col-sm-8">
+          <div class="input-group">
+          <input type="text" class="form-control" value="<%= link %>" Readonly>
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-primary" id="copy">copy clipboard</button>
+          </div>
       </div>
+            
+          </div>
+        </div>
+      <input type="text" name='uid' class="form-control hidden" id="uid" hidden>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-4 control-label">email:</label>
+          <div class="col-sm-8">
+            <input type="text" name='email' class="form-control" id="email" placeholder="enter email" value="<%= email %>">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">phone:</label>
+          <div class="col-sm-8">
+            <input type="text" name='phone' class="form-control" id="phone" placeholder="enter phone" value="<%= phone %>">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">Okex username:</label>
+          <div class="col-sm-8">
+            <input type="text" name='okex_uname' class="form-control" id="okex_uname" placeholder="enter okex_uname" value="<%= okex_uname %>">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">my eth account:</label>
+          <div class="col-sm-8">
+            <input type="text" name='eth_account' class="form-control" id="eth_account" placeholder="enter eth_account" value="<%= eth_account %>">
+          </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-8 col-sm-4">
+              <button type="button" class="btn btn-success" id="update">update my info</button>
+            </div>
+        </div>
+      </form>
     </div>
   </div>
+
+</div>
+
+</div>
 
 
   <%- include footer%>
     <script type="text/javascript">
 
-      $('.submit').on('click',function(){
-        let id = $(this).attr('data');
-        $('#myModal').modal()
-        let name = $('.row'+id).find('.name').html().trim();
-        let password = $('.row'+id).find('.password').html().trim();
-        console.log(name,password);
-
-      })
-
-
-
-      // $('#lgout').on('click', function() {
-      //
-      //   $.ajax({
-      //     type: "GET",
-      //     url: "/api/exit",
-      //     data: {},
-      //     dataType: "json",
-      //     success: function(data) {
-      //       location.href = '/login';
-      //     }
-      //   });
-      // })
+      $('#update').on('click',function(){
+        let email = $('#email').val();
+        let phone = $('#phone').val();
+        let okex_uname = $('#okex_uname').val();
+        let eth_account = $('#eth_account').val();
+        $.ajax({
+          type: "GET",
+          url: "/api/setuserinfo",
+          data: {
+            email:email,
+            phone:phone,
+            okex_uname:okex_uname,
+            eth_account:eth_account
+          },
+          dataType: "json",
+          success: function(data) {
+            if( data.code == 200){
+            alert(data.msg);
+          }
+        }
+        });
+      });
     </script>

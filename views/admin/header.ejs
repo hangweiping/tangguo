@@ -42,7 +42,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-            <a class="navbar-brand" href="/">首页</a>
+            <a class="navbar-brand" href="/">index</a>
           </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
@@ -50,22 +50,8 @@
             <ul class="nav navbar-nav">
 
               <%if(title=='首页'){%>
-                <li class="active"><a href="/">用户管理 </a></li>
-                <li class=""><a href="/planList">查看留言板 </a></li>
-                <li class=""><a href="/board">留言板 </a></li>
-                <% }else if(title=='留言板'){%>
-                  <li class=""><a href="/">用户管理 </a></li>
-                  <li class=""><a href="/planList">查看留言板 </a></li>
-                <li class="active"><a href="/board">留言板 </a></li>
-                <%}else if(title=='查看留言板'){%>
-                  <li class=""><a href="/">用户管理 </a></li>
-                  <li class="active"><a href="/planList">查看留言板 </a></li>
-                  <li class=""><a href="/board">留言板 </a></li>
-
-                <% }else{%>
-                <li class=""><a href="/">用户管理 </a></li>
-                <li class=""><a href="/planList">查看留言板 </a></li>
-                <li class=""><a href="/board">留言板 </a></li>
+                <li class="active"><a href="/">home </a></li>
+                <li class=""><a href="/">obey</a></li>
                 <%}%>
 
 
@@ -73,13 +59,13 @@
             <ul class="nav navbar-nav navbar-right">
               <li>
                 <a href="#">
-                你好，<%=name %>
+                hello，<%=name %>
               </a>
               </li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">action <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a id='lgout' href="/api/exit">退出</a></li>
+                  <li><a id='lgout' href="/api/exit">lgout</a></li>
 
                 </ul>
               </li>

@@ -5,7 +5,7 @@
     <div class="col-md-6">
 
       <div class="panel panel-success">
-        <div class="panel-heading">用户注册</div>
+        <div class="panel-heading">register</div>
         <div class="panel-body">
           <form data-toggle="validator" id="form" role="form" class="form-horizontal" action="/actReg" method="post">
             <div class="form-group">
@@ -31,17 +31,17 @@
               <div class="form-group">
                   <label for="inputEmail3" class="col-sm-4 control-label">inviter</label>
                   <div class="col-sm-8">
-                    <input type="text" name='inviter' id="inviter" autocomplete='off' class="form-control" placeholder="invitere">
+                    <input type="text" name='inviter' value="<%= inviter %>" id="inviter" autocomplete='off' class="form-control" placeholder="inviter">
                   </div>
                 </div>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-info" id="regBtn">submit</button>
+                <button type="button" class="btn btn-info" id="regBtn">submit</button>
               </div>
             </div>
           </form>
         </div>
-        <div class="panel-footer">已经有账号，去       <a href="/login" style="font-size: 16px;">登录</a></div>
+        <div class="panel-footer">to       <a href="/login" style="font-size: 16px;">login</a></div>
       </div>
 
     </div>
@@ -54,28 +54,18 @@
 
 
   <script type="text/javascript">
-  function getUrlParms(name){
-   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-   var r = window.location.search.substr(1).match(reg);
-   if(r!=null)
-   return unescape(r[2]);
-   return null;
-   }
-var id = getUrlParms("id");
-$('#inviter').val(id);
-  $('#form').validator().on('submit', function (e) {
-  if (e.isDefaultPrevented()) {
-    // handle the invalid form...
-  } else {
-
+$("#regBtn").click(function(){
       let username = $('#username').val();
       let password = $('#password').val();
+      let inviter = $('#inviter').val();
+      
       $.ajax({
         type: "post",
         url: "/api/adduser",
         data: {
           username:username,
-          password:password
+          password:password,
+          inviter:inviter
         },
         dataType: "json",
         success: function(data) {
@@ -83,15 +73,13 @@ $('#inviter').val(id);
           let msg = data.msg;
           if(code==200 || code == 100){
             alert(msg);
-            location.href='/login';
+            location.href='/login?tip=1';
           }else{
             alert(msg);
           }
 
         }
       });
-
-  }
-})
+    });
     
   </script>

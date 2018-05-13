@@ -40,7 +40,7 @@ let getuser = function( value ) {
 
 let adduser = function( value ) {
   // let _sql = "SELECT * FROM user_table WHERE (username)= (?)";
-  let _sql = "insert into user_table (username,password) values (?,?)";
+  let _sql = "insert into user_table (username,password,inviter,active_code,create_time) values (?,?,?,?,?)";
   return query( _sql, value )
 }
 
@@ -88,6 +88,23 @@ let getAllPostCount = function(){
   return query( _sql )
 }
 
+//激活
+let getCode =  function(value){
+  let _sql = `UPDATE user_table SET is_actived='1' where (active_code)= (?)`;
+  return query( _sql, value )
+}
+
+//获取用户信息
+let getUserInfo =  function(value){
+  let _sql = `SELECT * FROM user_info where (uid)= (?)`;
+  return query( _sql, value )
+}
+
+//更新用户信息
+let setUserInfo =  function(value){
+  let _sql = `UPDATE user_info SET email=(?),phone=(?), okex_uname=(?), eth_account=(?) where (uid)= (?)`;
+  return query( _sql, value )
+}
 
 module.exports={
 	query,
@@ -98,6 +115,8 @@ module.exports={
   insertPost,
   getAllPost,
   getAlluserCount,
-  getAllPostCount
-
+  getAllPostCount,
+  getCode,
+  getUserInfo,
+  setUserInfo
 }

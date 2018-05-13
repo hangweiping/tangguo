@@ -3,6 +3,11 @@ var router = express.Router();
 var moment = require('moment');
 var dbModel = require('../db/mysql');
 var mailTransport = require("../service/email");
+var UUID = require('uuid-js');
+var moment = require('moment');
+var request = require('request');
+var config = require('../config/index');
+
 /* GET users listing. */
 
 
@@ -12,6 +17,7 @@ router.post('/adduser', function(req, res) {
 
   let username = req.body.username;
   let password = req.body.password;
+  let inviter = req.body.inviter;  
 
   if (username == '' || password == '') {
     res.json({
@@ -29,8 +35,11 @@ router.post('/adduser', function(req, res) {
         'code': '100'
       })
     } else {
-      dbModel.adduser([`${username}`, `${password}`]).then(results => {
+      let active_code = UUID.create().toString();
+      let create_time = moment().format("YYYY-MM-DD HH:mm:ss");
+      dbModel.adduser([`${username}`, `${password}`,`${inviter}`,`${active_code}`,`${create_time}`]).then(results => {
         if (results.insertId > 0) {
+          request(config.host+'/api/send_email?to='+username+'&url='+config.host+"/active?code="+active_code);
           res.json({
             'msg': '注册成功快去登录吧',
             'code': '200'
@@ -62,7 +71,14 @@ router.post('/login', function(req, res) {
 
   dbModel.login([`${username}`, `${password}`]).then(results => {
     if (results.length > 0) {
+      if (results[0].is_actived !== '1'){
+        res.json({
+          'msg': 'not_is_actived, to active',
+          'code': '102'
+        })
+      }
       res.cookie('name',username);
+      res.cookie('uid',results[0].id);
       res.json({
         'msg': '登陆成功',
         'code': '200'
@@ -105,7 +121,7 @@ router.get("/send_email", function(req, res){
     to              : req.query.to,
     subject         : '糖果注册激活',
     text            : '',
-    html            : '<center><h1>你好，这是一封来自糖果的激活邮件！点击它！！！</h1></center><br><center>'+ req.query.url +'</center>'
+    html            : '<center><h1>你好，这是一封来自糖果的激活邮件！点击它！！！</h1></center><br><center>'+ '<a href="'+req.query.url+'">'+req.query.url+'</a>' +'</center>'
 };
 
 mailTransport.sendMail(options, function(err, msg){
@@ -118,6 +134,23 @@ mailTransport.sendMail(options, function(err, msg){
         res.render('index', { title: "已接收："+msg.accepted});
     }
 });
+});
+
+//  setuserinfo
+router.get('/setuserinfo', function(req, res) {
+  if (req.cookies.name) {
+    let uid = req.cookies.uid || 0;
+    let email = req.query.email;
+    let phone = req.query.phone;
+    let okex_uname = req.query.okex_uname;
+    let eth_account = req.query.eth_account;
+    dbModel.setUserInfo([email, phone, okex_uname, eth_account, uid]).then(results => {
+      res.json({
+        'msg':'update info success!',
+        code:200
+      });
+    })
+  }
 });
 
 module.exports = router;
