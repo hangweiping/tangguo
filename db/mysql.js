@@ -1,9 +1,10 @@
 var mysql = require('mysql');
+var config = require('../config/index');
 var pool  = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '',
-  database:'blog', // 前面建的user表位于这个数据库中
+  host: config.db.host,
+  user: config.db.user,
+  password: config.db.password,
+  database:config.db.database, // 前面建的user表位于这个数据库中
   port: 3306
 });
 
@@ -106,6 +107,11 @@ let setUserInfo =  function(value){
   return query( _sql, value )
 }
 
+let updateIsActive = function(value){
+  let _sql = `UPDATE user_table SET is_active_email_sent='1' where (id)= (?)`;
+  return query( _sql, value)
+}
+
 module.exports={
 	query,
   getuser,
@@ -118,5 +124,6 @@ module.exports={
   getAllPostCount,
   getCode,
   getUserInfo,
-  setUserInfo
+  setUserInfo,
+  updateIsActive
 }

@@ -39,7 +39,11 @@ router.post('/adduser', function(req, res) {
       let create_time = moment().format("YYYY-MM-DD HH:mm:ss");
       dbModel.adduser([`${username}`, `${password}`,`${inviter}`,`${active_code}`,`${create_time}`]).then(results => {
         if (results.insertId > 0) {
-          request(config.host+'/api/send_email?to='+username+'&url='+config.host+"/active?code="+active_code);
+          request(config.host+'/api/send_email?to='+username+'&url='+config.host+"/active?code="+active_code,function (error, response, body) {
+            if (response.statusCode){
+              dbModel.updateIsActive([`${results.insertId}`])
+            }
+          });
           res.json({
             'msg': '注册成功快去登录吧',
             'code': '200'
@@ -116,14 +120,14 @@ router.post('/post',function(req,res){
 })
 
 router.get("/send_email", function(req, res){
-  var options = {
-    from            : '"hangweiping@126.com',
-    to              : req.query.to,
-    subject         : '糖果注册激活',
-    text            : '',
-    html            : '<center><h1>你好，这是一封来自糖果的激活邮件！点击它！！！</h1></center><br><center>'+ '<a href="'+req.query.url+'">'+req.query.url+'</a>' +'</center>'
-};
-
+  var options = config.email.options;
+  options.to = req.query.to;
+  //默认内容
+  options.html = '<center><h1>你好，这是一封来自糖果的激活邮件！点击它！！！</h1></center><br><center>'+ '<a href="'+req.query.url+'">'+req.query.url+'</a>' +'</center>';
+  //传入内容
+  if (req.query.html){
+    options.html=req.query.html;
+  }
 mailTransport.sendMail(options, function(err, msg){
     if(err){
         console.log(err);

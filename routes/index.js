@@ -39,7 +39,6 @@ router.get('/', function(req, res, next) {
   if (req.cookies.name) {
     let uid = req.cookies.uid || 0;
     dbModel.getUserInfo([uid]).then(results => {
-      console.log(results);
         res.render('admin/index', {
           name: req.cookies.name,
           title: '首页',
@@ -54,14 +53,6 @@ router.get('/', function(req, res, next) {
     res.redirect('/login');
   }
 
-});
-
-// 留言板
-router.get('/board', function(req, res, next) {
-  res.render('admin/board', {
-    title: '留言板',
-    name: req.cookies.name,
-  });
 });
 
 
@@ -101,31 +92,6 @@ router.get('/active', function(req, res, next) {
   });
 });
 
-// 查看留言板
-
-router.get('/planList', function(req, res) {
-  let curPage = req.query.page-1 || 0;
-
-  console.log(curPage);
-  dbModel.getAllPost([curPage]).then(results => {
-    dbModel.getAllPostCount().then(count=>{
-      for(let i=0;i<results.length;i++){
-        results[i].date=moment(results[i].date).format('YYYY-MM-DD HH:mm:ss');
-      }
-      let totalCount = count[0]['COUNT(1)'];
-      let totalPage =  Math.ceil(totalCount/10);
-      res.render('admin/planList', {
-        title: '查看留言板',
-        data: results,
-        name: req.cookies.name,
-        totalPage:totalPage,
-        curPage:curPage
-      });
-
-    })
-  })
-
-})
 
 // api
 
