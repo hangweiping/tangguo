@@ -23,7 +23,7 @@ i18next
       addPath: __dirname + '/locales/{{lng}}/{{ns}}.missing.json'
     },
     fallbackLng: 'en',
-    preload: ['en', 'de'],
+    preload: ['en', 'ko', 'zh'],
     saveMissing: true
   });
 

@@ -4,7 +4,7 @@ module.exports = {
         "host": "smtp.126.com",
         "port": "25",
         "user": "hangweiping@126.com",
-        "pass": "h136151148",
+        "pass": "",
         "options": {
             'from'   : '"hangweiping@126.com',
             'subject': '糖果注册激活',
