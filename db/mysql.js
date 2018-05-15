@@ -52,42 +52,6 @@ let login = function( value ) {
   return query( _sql, value )
 }
 
-// 查找所有用户
-
-let getAlluser = function(value){
-  let starCount= value*10;
-  let endCount = 10;
-  let _sql = `SELECT * FROM user_table order by id desc limit ${starCount},${endCount}`;
-  return query( _sql )
-}
-//  用户总数
-let getAlluserCount = function(){
-  let _sql = 'SELECT COUNT(1) FROM user_table';
-  return query( _sql )
-}
-
-
-// 添加留言
-let insertPost = function( value ) {
-  let _sql = "insert into post (username,content,date) values(?,?,?)";
-  return query( _sql, value )
-}
-
-// 查找所有留言
-
-let getAllPost =  function(value){
-  let starCount= value*10;
-  let endCount = 10;
-  let _sql = `SELECT * FROM post order by uid desc limit ${starCount},${endCount}`;
-  return query( _sql )
-}
-
-
-//  留言总数
-let getAllPostCount = function(){
-  let _sql = 'SELECT COUNT(1) FROM post';
-  return query( _sql )
-}
 
 //激活
 let getCode =  function(value){
@@ -98,6 +62,12 @@ let getCode =  function(value){
 //获取用户信息
 let getUserInfo =  function(value){
   let _sql = `SELECT * FROM user_info where (uid)= (?)`;
+  return query( _sql, value )
+}
+
+//获取用户信息
+let getBonus =  function(value){
+  let _sql = `SELECT * FROM bonus where (uid)= (?)`;
   return query( _sql, value )
 }
 
@@ -117,13 +87,9 @@ module.exports={
   getuser,
   adduser,
   login,
-  getAlluser,
-  insertPost,
-  getAllPost,
-  getAlluserCount,
-  getAllPostCount,
   getCode,
   getUserInfo,
+  getBonus,
   setUserInfo,
   updateIsActive
 }

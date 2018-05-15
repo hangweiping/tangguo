@@ -79,7 +79,8 @@ router.post('/login', function(req, res) {
         res.json({
           'msg': 'not_is_actived, to active',
           'code': '102'
-        })
+        });
+        return;
       }
       res.cookie('name',username);
       res.cookie('uid',results[0].id);

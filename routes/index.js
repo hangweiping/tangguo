@@ -38,7 +38,15 @@ router.get('*', function(req, res, next) {
 router.get('/', function(req, res, next) {
   if (req.cookies.name) {
     let uid = req.cookies.uid || 0;
+    let bonus_to_send = 0;
+    let bonus_sent = 0;
+    
     dbModel.getUserInfo([uid]).then(results => {
+      dbModel.getBonus([uid]).then(ress => {
+        if (ress.length>0){
+          bonus_to_send = ress[0].bonus_to_send;
+          bonus_sent = ress[0].bonus_sent;
+        }
         res.render('admin/index', {
           name: req.cookies.name,
           title: '首页',
@@ -46,8 +54,11 @@ router.get('/', function(req, res, next) {
           email: results[0].email,
           phone: results[0].phone,
           okex_uname: results[0].okex_uname,
-          eth_account: results[0].eth_account
+          eth_account: results[0].eth_account,
+          bonus_to_send: bonus_to_send,
+          bonus_sent:bonus_sent
         });
+      });
     })
   } else {
     res.redirect('/login');
