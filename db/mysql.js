@@ -59,6 +59,12 @@ let getCode =  function(value){
   return query( _sql, value )
 }
 
+//获取uid by code
+let getUidByCode =  function(value){
+  let _sql = `SELECT * FROM user_table WHERE (active_code)= (?)`;
+  return query( _sql, value )
+}
+
 //获取用户信息
 let getUserInfo =  function(value){
   let _sql = `SELECT * FROM user_info where (uid)= (?)`;
@@ -77,10 +83,24 @@ let setUserInfo =  function(value){
   return query( _sql, value )
 }
 
+//激活
 let updateIsActive = function(value){
   let _sql = `UPDATE user_table SET is_active_email_sent='1' where (id)= (?)`;
   return query( _sql, value)
 }
+
+// 添加糖果
+let insertBonus = function( value ) {
+  let _sql = "insert into bonus (uid,bonus_to_send,bonus_sent) values(?,?,?)";
+  return query( _sql, value )
+}
+
+// 添加用户信息
+let insertUserInfo = function( value ) {
+  let _sql = "insert into user_info (uid,email) values(?,?)";
+  return query( _sql, value )
+}
+
 
 module.exports={
 	query,
@@ -88,8 +108,11 @@ module.exports={
   adduser,
   login,
   getCode,
+  getUidByCode,
   getUserInfo,
   getBonus,
   setUserInfo,
-  updateIsActive
+  updateIsActive,
+  insertBonus,
+  insertUserInfo
 }

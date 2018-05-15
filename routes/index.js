@@ -97,8 +97,15 @@ router.get('/reg', function(req, res, next) {
 router.get('/active', function(req, res, next) {
   let code = req.query.code;
   dbModel.getCode(code).then(results => {
+    dbModel.getUidByCode(code).then(re=>{
+      let uid = re[0].id;
+      let email = re[0].username;
+      dbModel.insertBonus([uid,0,0]).then();
+      dbModel.insertUserInfo([uid,email]).then();
+    });
     res.render('admin/active', {
       title: 'active',
+      name: req.cookies.name,
     });
   });
 });
